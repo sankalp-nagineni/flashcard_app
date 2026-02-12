@@ -3,14 +3,19 @@ import pg from 'pg'
 const { Pool } = pg
 
 // PostgreSQL connection configuration
-// You can override these with environment variables
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'flashcards',
-  user: process.env.DB_USER || process.env.USER, // Use OS username on macOS
-  password: process.env.DB_PASSWORD || undefined, // No password for local socket auth
-})
+// Railway provides DATABASE_URL, local dev uses individual vars
+const pool = process.env.DATABASE_URL
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    })
+  : new Pool({
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT || 5432,
+      database: process.env.DB_NAME || 'flashcards',
+      user: process.env.DB_USER || process.env.USER,
+      password: process.env.DB_PASSWORD || undefined,
+    })
 
 export async function initDb() {
   const client = await pool.connect()
