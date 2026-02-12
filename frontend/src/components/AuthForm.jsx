@@ -96,7 +96,7 @@ function AuthForm() {
               <li>Create <code>frontend/.env</code> file with:<br/>
                 <code>VITE_GOOGLE_CLIENT_ID=your-client-id</code>
               </li>
-              <li>Restart the frontend server</li>
+              <li>Restart the frontend server (npm run dev)</li>
             </ol>
           </div>
         ) : (
