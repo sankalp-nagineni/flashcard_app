@@ -13,11 +13,22 @@ console.log('Starting server...')
 console.log('PORT from env:', process.env.PORT)
 console.log('Using PORT:', PORT)
 
-// Middleware - Allow all origins
-app.use(cors())
+// Middleware - CORS configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://satisfied-warmth-production.up.railway.app',
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
+}
 
-// Handle preflight requests explicitly
-app.options('*', cors())
+app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
 app.use(express.json({ limit: '10mb' }))  // Increased limit for image uploads
 
 // Routes
