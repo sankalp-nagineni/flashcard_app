@@ -36,8 +36,8 @@ app.use((err, req, res, next) => {
 // Initialize database and start server
 async function start() {
   await initDb()
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`)
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`)
   })
 }
 
