@@ -37,6 +37,11 @@ app.use('/api/sets', setsRoutes)
 app.use('/api/cards', cardsRoutes)
 app.use('/api/study', studyRoutes)
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ message: 'Flashcard API is running', version: '1.0.0' })
+})
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
