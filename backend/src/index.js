@@ -7,7 +7,11 @@ import cardsRoutes from './routes/cards.js'
 import studyRoutes from './routes/study.js'
 
 const app = express()
-const PORT = process.env.PORT || 3001
+const PORT = parseInt(process.env.PORT, 10) || 3001
+
+console.log('Starting server...')
+console.log('PORT from env:', process.env.PORT)
+console.log('Using PORT:', PORT)
 
 // Middleware - Allow all origins
 app.use(cors())
@@ -35,10 +39,23 @@ app.use((err, req, res, next) => {
 
 // Initialize database and start server
 async function start() {
-  await initDb()
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`)
-  })
+  try {
+    console.log('Initializing database...')
+    await initDb()
+    console.log('Database initialized, starting HTTP server...')
+    
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server is listening on 0.0.0.0:${PORT}`)
+      console.log('Server ready to accept connections')
+    })
+    
+    server.on('error', (err) => {
+      console.error('Server error:', err)
+    })
+  } catch (err) {
+    console.error('Startup error:', err)
+    process.exit(1)
+  }
 }
 
-start().catch(console.error)
+start()
