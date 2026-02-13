@@ -11,11 +11,8 @@ RUN npm ci --only=production
 # Copy source code
 COPY . .
 
-# Expose the port
-EXPOSE 8080
-
-# Set environment variable
-ENV PORT=8080
+# Railway will set PORT dynamically
+# Don't hardcode it - let Railway control it
 
 # Start the server
 CMD ["node", "src/index.js"]
