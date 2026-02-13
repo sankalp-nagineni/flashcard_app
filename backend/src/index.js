@@ -60,13 +60,22 @@ async function start() {
     await initDb()
     console.log('Database initialized, starting HTTP server...')
     
-    const server = app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server is listening on 0.0.0.0:${PORT}`)
+    const server = app.listen(PORT, () => {
+      console.log(`Server is listening on port ${PORT}`)
       console.log('Server ready to accept connections')
     })
     
     server.on('error', (err) => {
       console.error('Server error:', err)
+    })
+    
+    // Keep process alive
+    process.on('SIGTERM', () => {
+      console.log('SIGTERM received, shutting down gracefully')
+      server.close(() => {
+        console.log('Server closed')
+        process.exit(0)
+      })
     })
   } catch (err) {
     console.error('Startup error:', err)
